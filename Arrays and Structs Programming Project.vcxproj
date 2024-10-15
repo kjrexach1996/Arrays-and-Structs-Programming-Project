@@ -129,6 +129,9 @@
   <ItemGroup>
     <ClCompile Include="Arrays and Structs Programming Project.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="runners.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
