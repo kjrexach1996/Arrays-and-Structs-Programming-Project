@@ -1,8 +1,10 @@
-// Arrays and Structs Programming Project.cpp : This program will create a table based on multiple
-// runners' performances in preparation for a marathon. The program will read a data file containing
-// the names of the runners and how many miles each runner has completed for each day of the week, and
-// it will display the infomation in the form of a table, showing additional information such as
-// total miles completed for the week and the average number of miles completed in a day.
+// Arrays and Structs Programming Project.cpp : This program centered around structs
+// will create a table based on multiple runners' performances in preparation for a marathon. 
+// The program will read a data file containing the names of the runners and how many miles
+// each runner has completed for each day they ran. It will then create structs which will hold 
+// the information for each runner received from the data file as well as additional information such as
+// total miles completed for the week and the average number of miles completed in a day. Finally, an
+// organized table will be created displaying all the information stored in the individual structs.
 
 #include <iostream>
 #include <iomanip>
@@ -17,6 +19,8 @@ const int MAX_RUNNERS = 10;
 const int DAYS_RAN = 7;
 const string dataFile = "runners.txt";
 
+//Struct definition with members representing the runner's name, the miles they ran each day, 
+//the total number of miles completed and the average number of miles completed daily.
 struct runnerData
 {
 	string name;
@@ -25,39 +29,35 @@ struct runnerData
 	double average;
 };
 
-//Individual arrays ready to contain names and daily number of miles must exist and must be parallel; 
+//An array available to store structs representing data for each runner must exist; 
 //file containing runner information must be available; function must also be able to receive integer
 //value representing the maximum number of runners able to be processed.
-//Function must return the number of runners in the text file for further array processing; name and 
-//daily miles arrays must be updated, and file being processed must be closed.
+//Function must return the number of runners in the text file--the program will used this returned
+//value to know how many runners are in the struct array and how many times loops processing the array
+//will be iterated; name and miles[] in individual structs members will be updated.
 int getRunnerData(runnerData runners[], string fileName, int maximum);
 
-//Function takes number of runners in file and reference to daily miles arrays (must not be altered);
-//function also expects individual arrays containing total miles and average daily miles per runner to 
-//exist; these arrays must be parallel.
-//Total miles and average miles arrays will be updated.
+//Function takes number of runners in file (must not be altered) and reference to struct array.
+//Total miles and average miles members in individual structs will be updated.
 void getMileData(runnerData runners[], const int numRunners);
 
-//Function expects to receive the number of runners in the file as well as references to all arrays to exist;
-//all arrays must contain the appropriate information and must be parallel to accuarately build table.
+//Function expects to receive the number of runners in the file as well as references to the struct array.
 //Function will output systematic table with various columns representing the names of each runner as well as
 //the number of miles run per day, the total number of miles completed, and the average number of daily miles completed.
+//Each member in each struct in struct array will be processed and displayed.
 void dispRunnerReport(runnerData runners[], const int numRunners);
 
 int main()
 {
+	//Initializes array to create and store structs for each runner
+	//with members representing names, miles, etc.
 	runnerData runners[MAX_RUNNERS];
-	/*All arrays are initialized using constants
-	string runners[MAX_RUNNERS];
-	double dailyMiles[MAX_RUNNERS][DAYS_RAN];
-	double totalMiles[MAX_RUNNERS];
-	double avgMiles[MAX_RUNNERS];*/
 
-	//Number of runners is obtained by the function to use for array processing
-	//Function also updates runners[] and dailyMiles[] arrays
+	//Number of runners is obtained by the function to use for struct array processing
+	//Function also updates runners[].name and runners[].miles[] members for each runner struct
 	int numRunners = getRunnerData(runners, dataFile, MAX_RUNNERS);
 	
-	//Function updates totalMiles[] and avgMiles[] arrays
+	//Function updates runners[].total and runners[].average for each runner struct
 	getMileData(runners, numRunners);
 
 	//Function outputs formatted table displaying runner names, daily miles, total miles,
@@ -81,14 +81,15 @@ int getRunnerData(runnerData runners[], string fileName, int maximum)
 	int num = 0;
 
 	//Loop repeats until either the end of the file or the maximum number
-	//able to be processed is reached
+	//of runners able to be processed is reached
 	while (!inputFile.eof() && num < maximum)
 	{
-		//Stores runner names in runners[]
+		//Stores runner names in runners[].name for each runner
 		inputFile >> runners[num].name;
 
 		for (int day = 0; day < DAYS_RAN; day++)
 		{
+			//Updates runners[].miles[] for each day ran
 			inputFile >> runners[num].miles[day];
 		}
 		//Increases runner count by 1
@@ -110,15 +111,16 @@ void getMileData(runnerData runners[], const int numRunners)
 		//Counter resets
 		totalMiles = 0;
 
+		//Per day
 		for (int day = 0; day < DAYS_RAN; day++)
 		{
 			//Adds daily miles to total for each day
 			totalMiles += runners[runner].miles[day];
 		}
-		//Stores total in totalMiles[] per runner
+		//Stores total miles in runners[].total per runner
 		runners[runner].total = totalMiles;
 
-		//Stores average daily miles in avgMiles[] per runner
+		//Stores average daily miles in runners[].average per runner
 		runners[runner].average = runners[runner].total / DAYS_RAN;
 	}
 
@@ -129,7 +131,7 @@ void dispRunnerReport(runnerData runners[], const int numRunners)
 	//Creates "Name" heading
 	cout << left << setw(20) << "Name";
 
-	//Creates a heading for every day runners ran, given the number of days
+	//Creates a heading for every day runners ran, given a number of days
 	for (int day = 0; day < DAYS_RAN; day++)
 	{
 		cout << "Day " << left << setw(6) << (day + 1);
